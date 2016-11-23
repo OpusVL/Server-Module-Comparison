@@ -1,6 +1,14 @@
 use Test::Most;
 use Server::Module::Comparison;
 
+BEGIN {
+    unless ($ENV{LIVE_TEST} )
+    {
+        plan skip_all => 'This requires access to private quay.io repositories to test. Set LIVE_TEST=1 if you have the necessary setup.';
+    }
+}
+
+
 ok my $comparer = Server::Module::Comparison->new({ 
         perl_path => '/opt/perl5/bin',
         modules => [qw/OpusVL::CMS OpusVL::FB11X::CMSView OpusVL::FB11X::CMS/] 
