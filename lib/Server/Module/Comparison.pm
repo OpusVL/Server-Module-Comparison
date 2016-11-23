@@ -7,7 +7,7 @@ use Path::Tiny;
 use Moo;
 use Types::Standard -types;
 
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 
 has perl_path => (is => 'ro', isa => Str, default => '');
 has modules => (is => 'ro', isa => ArrayRef);
