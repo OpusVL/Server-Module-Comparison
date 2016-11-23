@@ -33,6 +33,14 @@ sub check_container
     return $self->_run_mversion($cmd);
 }
 
+sub check_ssh_server
+{
+    my $self = shift;
+    my $server = shift;
+    my $cmd = "ssh $server " . join(' ', @{$self->_mversion_command});
+    return $self->_run_mversion($cmd);
+}
+
 sub _run_mversion
 {
     my $self = shift;
