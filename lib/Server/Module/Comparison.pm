@@ -41,6 +41,13 @@ sub check_ssh_server
     return $self->_run_mversion($cmd);
 }
 
+sub check_local
+{
+    my $self = shift;
+    my $cmd = join(' ', @{$self->_mversion_command});
+    return $self->_run_mversion($cmd);
+}
+
 sub _run_mversion
 {
     my $self = shift;
