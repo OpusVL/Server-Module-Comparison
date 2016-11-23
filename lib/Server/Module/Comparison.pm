@@ -15,14 +15,21 @@ has modules => (is => 'ro', isa => ArrayRef);
 sub FromModuleList
 {
     my $filename = shift;
+    my $extra_params = shift;
+    $extra_params //= {};
     my @modules = map { chomp; $_ } grep { !/^\s*$/ }  path($filename)->lines_utf8;
-    return Server::Module::Comparison->new({ modules => \@modules });
+    return Server::Module::Comparison->new({ %$extra_params, modules => \@modules });
 }
 
 sub _mversion_command
 {
     my $self = shift;
-    return [path($self->perl_path)->child('mversion'), '-f', @{$self->modules}, '2>&1'];
+    my $command = 'mversion';
+    if($self->perl_path)
+    {
+        $command = path($self->perl_path)->child($command);
+    }
+    return [$command, '-f', @{$self->modules}, '2>&1'];
 }
 
 sub check_container
@@ -46,6 +53,23 @@ sub check_local
     my $self = shift;
     my $cmd = join(' ', @{$self->_mversion_command});
     return $self->_run_mversion($cmd);
+}
+
+sub check_correct_guess
+{
+    my $self = shift;
+    my $identifier = shift;
+    # perhaps add a special case for local?
+    if($identifier =~ m|/|)
+    {
+        # assume it's docker
+        return $self->check_container($identifier);
+    }
+    else
+    {
+        return $self->check_ssh_server($identifier);
+        # assume it's ssh
+    }
 }
 
 sub _run_mversion

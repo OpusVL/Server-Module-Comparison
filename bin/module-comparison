@@ -1,0 +1,44 @@
+#!/usr/bin/perl
+use strictures 2;
+# ABSTRACT: check perl module versions installed on servers.
+
+use Pod::Usage;
+use Getopt::Long qw(:config gnu_getopt);
+
+my %option = (
+    help => sub { pod2usage(verbose => 2) },
+);
+GetOptions(\%option,
+    'modules|m=s', 
+    'live=s', 
+    'staging=s', 
+    'perl=s', 
+);
+unless($option{live} && $option{staging} && $option{modules})
+{
+    pod2usage(
+        verbose => 0, 
+        exitval => 1, 
+        message => "Missing specify module list and live and staging servers"
+    );
+}
+use Server::Module::Comparison;
+my $extra = {};
+if($option{perl})
+{
+    $extra->{perl_path} = $option{perl};
+}
+my $comp = Server::Module::Comparison::FromModuleList($option{modules}, $extra);
+my $staging = $comp->check_correct_guess($option{staging});
+my $live = $comp->check_correct_guess($option{live});
+use Test::Most;
+eq_or_diff $staging, $live, { filename_a => 'Staging', filename_b => 'Live'};
+done_testing;
+
+=head1 SYNOPSIS
+
+    module-comparison --modules module-list.txt --live live-server.somedomain -staging quay.io/opusvl/somecontainer [--perl /opt/perl5/bin]
+
+=head1 DESCRIPTION
+
+Compare a list of perl modules on each server to see what is different.
