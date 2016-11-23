@@ -128,6 +128,19 @@ modules.
 
 Run mversion in a docker container.
 
+=head2 check_ssh_server
+
+Checks modules via ssh.
+
+=head2 check_local
+
+Checks modules locally.
+
+=head2 check_correct_guess
+
+This takes a string and guesses whether to assume it's a container identifier
+or an ssh server.
+
 =head1 ATTRIBUTES
 
 =head2 perl_path
