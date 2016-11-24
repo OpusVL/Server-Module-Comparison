@@ -1,5 +1,4 @@
 use Test::Most;
-use Server::Module::Comparison;
 
 BEGIN {
     unless ($ENV{SSH_SERVER} )
@@ -8,6 +7,7 @@ BEGIN {
     }
 }
 
+use Server::Module::Comparison;
 
 ok my $comparer = Server::Module::Comparison->new({ 
         perl_path => '/opt/perl5/bin',
