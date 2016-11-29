@@ -9,7 +9,7 @@ use Types::Standard -types;
 use Capture::Tiny qw/capture/;
 use failures qw/module::comparison/;
 
-our $VERSION = '0.002';
+our $VERSION = '0.003';
 
 has perl_path => (is => 'ro', isa => Str, default => '');
 has modules => (is => 'ro', isa => ArrayRef);
