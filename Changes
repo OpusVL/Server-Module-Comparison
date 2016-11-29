@@ -2,6 +2,13 @@ Revision history for Server-Module-Comparison
 
 {{ $NEXT }}
 
+0.002     2016-11-29 22:57:10+00:00 Europe/London
+
+  - Fix perl 5.8 compat issue
+  - Added extra pod declaration
+  - Prevent pointless module loading on tests that skip.
+  - Try to make the error handling a bit more robust
+
 0.001     2016-11-23 12:39:10+00:00 Europe/London
 
   - First version.
