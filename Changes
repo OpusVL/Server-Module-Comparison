@@ -2,6 +2,10 @@ Revision history for Server-Module-Comparison
 
 {{ $NEXT }}
 
+0.003     2016-12-06 08:39:48+00:00 Europe/London
+
+  - Fixed goof in documentation.
+
 0.002     2016-11-29 22:57:10+00:00 Europe/London
 
   - Fix perl 5.8 compat issue
