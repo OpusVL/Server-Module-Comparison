@@ -1,5 +1,4 @@
 use Test::Most;
-use Server::Module::Comparison;
 
 BEGIN {
     unless ($ENV{LIVE_TEST} )
@@ -7,7 +6,7 @@ BEGIN {
         plan skip_all => 'This checks the local machine.  Set LIVE_TEST=1 if you have /opt/perl5/bin/mversion installed.';
     }
 }
-
+use Server::Module::Comparison;
 
 ok my $comparer = Server::Module::Comparison->new({ 
         perl_path => '/opt/perl5/bin',

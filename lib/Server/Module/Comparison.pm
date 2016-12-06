@@ -6,8 +6,10 @@ package Server::Module::Comparison;
 use Path::Tiny;
 use Moo;
 use Types::Standard -types;
+use Capture::Tiny qw/capture/;
+use failures qw/module::comparison/;
 
-our $VERSION = '0.002';
+our $VERSION = '0.003';
 
 has perl_path => (is => 'ro', isa => Str, default => '');
 has modules => (is => 'ro', isa => ArrayRef);
@@ -16,7 +18,7 @@ sub FromModuleList
 {
     my $filename = shift;
     my $extra_params = shift;
-    $extra_params //= {};
+    $extra_params = {} unless defined $extra_params;
     my @modules = map { chomp; $_ } grep { !/^\s*$/ }  path($filename)->lines_utf8;
     return Server::Module::Comparison->new({ %$extra_params, modules => \@modules });
 }
@@ -36,7 +38,7 @@ sub check_container
 {
     my $self = shift;
     my $container = shift;
-    my $cmd = "docker run --rm -i $container " . join(' ', @{$self->_mversion_command});
+    my $cmd = [qw/docker run --rm -i/, $container, @{$self->_mversion_command}];
     return $self->_run_mversion($cmd);
 }
 
@@ -44,14 +46,14 @@ sub check_ssh_server
 {
     my $self = shift;
     my $server = shift;
-    my $cmd = "ssh $server " . join(' ', @{$self->_mversion_command});
+    my $cmd = ['ssh', $server, @{$self->_mversion_command}];
     return $self->_run_mversion($cmd);
 }
 
 sub check_local
 {
     my $self = shift;
-    my $cmd = join(' ', @{$self->_mversion_command});
+    my $cmd = $self->_mversion_command;
     return $self->_run_mversion($cmd);
 }
 
@@ -77,9 +79,15 @@ sub _run_mversion
     my $self = shift;
     my $cmd = shift;
     #print "$cmd\n";
-    open my $fh, "-|", $cmd || die 'Failed to get module list';
-    my @lines = map { chomp; $_ } grep { !/^\s*$/ } <$fh>;
-    close $fh;
+    my ($stdout, $stderr, $exit) = capture {
+        system(@$cmd);
+    };
+    if($exit)
+    {
+        my $command = join(' ', @$cmd);
+        failure::module::comparison->throw("Failure running $command: $exit");
+    }
+    my @lines = map { chomp; $_ } grep { !/^\s*$/ } split(/\r\n|\r|\n/, $stdout);
     my %versions = map { _module_pair($_) } @lines;
     return \%versions;
 }
@@ -106,6 +114,22 @@ sub _module_pair
 
 1;
 
+=head1 SYNOPSIS
+
+Gets versions of perl modules on servers.
+
+    my $comparer = Server::Module::Comparison->new({
+         perl_path => '/opt/perl5/bin',
+         modules => [qw/OpusVL::CMS OpusVL::FB11X::CMSView OpusVL::FB11X::CMS/]
+     });
+    my $versions = $comparer->check_container('quay.io/opusvl/prem-website:staging');
+
+
+    my $comparer = Server::Module::Comparison::FromModuleList(
+        'modules.txt',
+        { perl_path => '/opt/perl5/bin/' }
+    );
+
 =head1 DESCRIPTION
 
 A module for checking which versions of a particular list of perl modules
@@ -121,12 +145,17 @@ at all.  It is designed as a quick and simple developer tool.
 
 =head2 FromModuleList
 
-Createa a new Server::Module::Comparison object from a line delimited list of 
+Createa a new Server::Module::Comparison object from a line delimited list of
 modules.
 
 =head2 check_container
 
 Run mversion in a docker container.
+
+    my $versions = $comparer->check_container('quay.io/user/some-website:staging');
+
+This is done by running the container locally.  It does not try to pull the
+container.  It is assumed you have access to docker and the correct image to hand.
 
 =head2 check_ssh_server
 

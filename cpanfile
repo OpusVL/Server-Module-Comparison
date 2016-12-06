@@ -2,6 +2,8 @@ requires "Moo" => "0";
 requires "Path::Tiny" => "0";
 requires "Types::Standard" => "0";
 requires "strictures" => "2";
+requires "Capture::Tiny" => 0;
+requires "failures" => 0;
 
 on 'test' => sub {
   requires "ExtUtils::MakeMaker" => "0";
