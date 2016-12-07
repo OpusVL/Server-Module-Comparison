@@ -11,11 +11,12 @@ my %option = (
 );
 GetOptions(\%option,
     'modules|m=s', 
+    'list=s', 
     'live=s', 
     'staging=s', 
     'perl=s', 
 );
-unless($option{live} && $option{staging} && $option{modules})
+unless((($option{live} && $option{staging}) || $option{list}) && $option{modules})
 {
     pod2usage(
         verbose => 0, 
@@ -30,15 +31,28 @@ if($option{perl})
     $extra->{perl_path} = $option{perl};
 }
 my $comp = Server::Module::Comparison::FromModuleList($option{modules}, $extra);
-my $staging = $comp->check_correct_guess($option{staging});
-my $live = $comp->check_correct_guess($option{live});
-use Test::Most;
-eq_or_diff $staging, $live, { filename_a => 'Staging', filename_b => 'Live'};
-done_testing;
+if($option{staging})
+{
+    my $staging = $comp->check_correct_guess($option{staging});
+    my $live = $comp->check_correct_guess($option{live});
+    use Test::Most;
+    eq_or_diff $staging, $live, { filename_a => 'Staging', filename_b => 'Live'};
+    done_testing;
+}
+elsif($option{list})
+{
+    my $modules = $comp->check_correct_guess($option{list});
+    use Test::Most;
+    ok $modules, 'Loaded modules';
+    explain $modules;
+    done_testing;
+}
 
 =head1 SYNOPSIS
 
     module-comparison --modules module-list.txt --live live-server.somedomain --staging quay.io/opusvl/somecontainer [--perl /opt/perl5/bin]
+    module-comparison --modules module-list.txt --list quay.io/opusvl/somecontainer [--perl /opt/perl5/bin]
+    module-comparison --modules - --list quay.io/opusvl/somecontainer [--perl /opt/perl5/bin]
 
 =head1 DESCRIPTION
 

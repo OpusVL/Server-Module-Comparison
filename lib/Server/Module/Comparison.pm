@@ -19,7 +19,16 @@ sub FromModuleList
     my $filename = shift;
     my $extra_params = shift;
     $extra_params = {} unless defined $extra_params;
-    my @modules = map { chomp; $_ } grep { !/^\s*$/ }  path($filename)->lines_utf8;
+    my @lines;
+    if($filename eq '-')
+    {
+        @lines = <STDIN>;
+    }
+    else
+    {
+        @lines = path($filename)->lines_utf8;
+    }
+    my @modules = map { chomp; $_ } grep { !/^\s*$/ }  @lines;
     return Server::Module::Comparison->new({ %$extra_params, modules => \@modules });
 }
 
