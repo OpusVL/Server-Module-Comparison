@@ -66,20 +66,46 @@ sub check_local
     return $self->_run_mversion($cmd);
 }
 
+sub identify_resource
+{
+    my $self = shift;
+    my $identifier = shift;
+    if($identifier =~ m|docker://(.*)$|)
+    {
+        return ('docker', $1);
+    }
+    elsif($identifier =~ m|ssh://(.*)$|)
+    {
+        return ('ssh', $1);
+    }
+    elsif($identifier =~ m|/|)
+    {
+        # assume it's docker
+        return ('docker', $identifier);
+    }
+    else
+    {
+        # assume it's ssh
+        return ('ssh', $identifier);
+    }
+}
+
 sub check_correct_guess
 {
     my $self = shift;
     my $identifier = shift;
-    # perhaps add a special case for local?
-    if($identifier =~ m|/|)
+    my ($type, $server) = $self->identify_resource($identifier);
+    if($type eq 'ssh')
     {
-        # assume it's docker
-        return $self->check_container($identifier);
+        return $self->check_ssh_server($server);
+    }
+    elsif($type eq 'docker')
+    {
+        return $self->check_container($server);
     }
     else
     {
-        return $self->check_ssh_server($identifier);
-        # assume it's ssh
+        die 'I don\'t know what to do!';
     }
 }
 
@@ -178,6 +204,9 @@ Checks modules locally.
 
 This takes a string and guesses whether to assume it's a container identifier
 or an ssh server.
+
+Also supports a C<docker://> or C<ssh://> type uri scheme to help identify
+the server being identified.
 
 =head1 ATTRIBUTES
 

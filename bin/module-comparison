@@ -52,7 +52,7 @@ elsif($option{list})
 
     module-comparison --modules module-list.txt --live live-server.somedomain --staging quay.io/opusvl/somecontainer [--perl /opt/perl5/bin]
     module-comparison --modules module-list.txt --list quay.io/opusvl/somecontainer [--perl /opt/perl5/bin]
-    module-comparison --modules - --list quay.io/opusvl/somecontainer [--perl /opt/perl5/bin]
+    module-comparison --modules - --list docker://somecontainer [--perl /opt/perl5/bin]
 
 =head1 DESCRIPTION
 
