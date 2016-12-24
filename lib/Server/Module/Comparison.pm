@@ -147,6 +147,101 @@ sub _module_pair
     }
 }
 
+sub difference_report
+{
+    my $self = shift;
+    my $first = shift;
+    my $second = shift;
+
+    my %newer;
+    my %older;
+    my %newly_installed;
+    my %removed;
+    for my $module (keys %$first)
+    {
+        if(exists $second->{$module})
+        {
+            if($first->{$module} > $second->{$module})
+            {
+                $older{$module} = [$first->{$module}, $second->{$module}];
+            }
+            elsif($first->{$module} < $second->{$module})
+            {
+                $newer{$module} = [$first->{$module}, $second->{$module}];
+            }
+        }
+        else
+        {
+            $removed{$module} = $first->{$module};
+        }
+    }
+    for my $module (keys %$second)
+    {
+        unless(exists $first->{$module})
+        {
+            $newly_installed{$module} = $second->{$module};
+        }
+    }
+    return {
+        updated => \%newer,
+        downgraded => \%older,
+        removed => \%removed,
+        installed => \%newly_installed,
+    };
+}
+
+sub human_readable_report
+{
+	my $self = shift;
+    my $report = shift;
+    my @lines;
+    if(%{$report->{downgraded}})
+    {
+        push @lines, 'DOWNGRADED Modules', '';
+        for my $key (sort keys %{$report->{downgraded}}) 
+        {
+            my ($v1, $v2) = @{$report->{downgraded}->{$key}};
+            push @lines, sprintf("%-40s\t%s -> %s", $key, $v1, $v2);
+        }
+        push @lines, '';
+    }
+    if(%{$report->{removed}})
+    {
+        push @lines, 'REMOVED Modules', '';
+        for my $key (sort keys %{$report->{removed}}) 
+        {
+            my $v1 = $report->{removed}->{$key};
+            push @lines, sprintf("%-40s\t%s", $key, $v1);
+        }
+        push @lines, '';
+    }
+    if(%{$report->{installed}})
+    {
+        push @lines, 'Installed Modules', '';
+        for my $key (sort keys %{$report->{installed}}) 
+        {
+            my $v1 = $report->{installed}->{$key};
+            push @lines, sprintf("%-40s\t%s", $key, $v1);
+        }
+        push @lines, '';
+    }
+    if(%{$report->{updated}})
+    {
+        push @lines, 'Udated Modules', '';
+        for my $key (sort keys %{$report->{updated}}) 
+        {
+            my ($v1, $v2) = @{$report->{updated}->{$key}};
+            push @lines, sprintf("%-40s\t%s -> %s", $key, $v1, $v2);
+        }
+        push @lines, '';
+    }
+    unless(@lines)
+    {
+        push @lines, 'No differences', '';
+    }
+	return join "\n", @lines;
+}
+
 1;
 
 =head1 SYNOPSIS

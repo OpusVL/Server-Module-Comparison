@@ -35,9 +35,11 @@ if($option{staging})
 {
     my $staging = $comp->check_correct_guess($option{staging});
     my $live = $comp->check_correct_guess($option{live});
-    use Test::Most;
-    eq_or_diff $staging, $live, { filename_a => 'Staging', filename_b => 'Live'};
-    done_testing;
+    #use Test::Most;
+    my $report = $comp->difference_report($live, $staging);
+    print $comp->human_readable_report($report);
+    #eq_or_diff $staging, $live, { filename_a => 'Staging', filename_b => 'Live'};
+    #done_testing;
 }
 elsif($option{list})
 {
