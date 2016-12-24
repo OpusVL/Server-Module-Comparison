@@ -2,6 +2,9 @@ Revision history for Server-Module-Comparison
 
 {{ $NEXT }}
 
+  - Write a proper differences report #5
+  - Allow an unambiguous uri style to make identifying containers/machines easier
+
 0.005     2016-12-07 13:10:31+00:00 Europe/London
 
   - Another release to fix pod in release.
