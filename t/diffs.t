@@ -66,7 +66,7 @@ Installed Modules
 
 OpusVL::CMS                             	0.102
 
-Udated Modules
+Updated Modules
 
 OpusVL::AppKitX::CMSView                	0.75 -> 0.76
 EOF
