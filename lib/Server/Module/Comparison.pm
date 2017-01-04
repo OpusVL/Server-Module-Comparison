@@ -227,7 +227,7 @@ sub human_readable_report
     }
     if(%{$report->{updated}})
     {
-        push @lines, 'Udated Modules', '';
+        push @lines, 'Updated Modules', '';
         for my $key (sort keys %{$report->{updated}}) 
         {
             my ($v1, $v2) = @{$report->{updated}->{$key}};
