@@ -6,6 +6,7 @@ ok my $comparer = Server::Module::Comparison->new({
     });
 my $status1 = {
 		'OpusVL::AppKit' => '2.26',
+		'OpusVL::CMS' => '0.82',
 		'OpusVL::AppKitX::CMSView' => '0.75',
 		'OpusVL::AuditTrail' => '0.20',
 		'OpusVL::TokenProcessor::API' => '0.11',
@@ -24,9 +25,10 @@ my $report = $comparer->difference_report(
 	$status1,
 	{
 		'OpusVL::AppKit' => '2.25',
+		'OpusVL::CMS' => '0.102',
+		'OpusVL::CMSExport' => '0.1',
 		'OpusVL::AppKitX::CMSView' => '0.76',
 		'OpusVL::AuditTrail' => '0.20',
-		'OpusVL::CMS' => '0.102',
 		'OpusVL::TokenProcessor::API' => '0.11',
 	},
 );
@@ -39,7 +41,7 @@ eq_or_diff $report,
 		]
 	},
 	installed => {
-		'OpusVL::CMS' => '0.102'
+		'OpusVL::CMSExport' => '0.1'
 	},
 	removed => {
 		'Some::Schema' => '0.37'
@@ -48,7 +50,8 @@ eq_or_diff $report,
 		'OpusVL::AppKitX::CMSView' => [
 			'0.75',
 			'0.76'
-		]
+		],
+		'OpusVL::CMS' => ['0.82', '0.102'],
 	}
 };
 
@@ -64,11 +67,12 @@ Some::Schema                            	0.37
 
 Installed Modules
 
-OpusVL::CMS                             	0.102
+OpusVL::CMSExport                       	0.1
 
 Updated Modules
 
 OpusVL::AppKitX::CMSView                	0.75 -> 0.76
+OpusVL::CMS                             	0.82 -> 0.102
 EOF
 
 done_testing;
