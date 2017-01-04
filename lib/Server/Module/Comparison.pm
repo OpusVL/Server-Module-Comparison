@@ -8,6 +8,7 @@ use Moo;
 use Types::Standard -types;
 use Capture::Tiny qw/capture/;
 use failures qw/module::comparison/;
+use Perl::Version;
 
 our $VERSION = '0.008';
 
@@ -161,11 +162,13 @@ sub difference_report
     {
         if(exists $second->{$module})
         {
-            if($first->{$module} > $second->{$module})
+            my $v1 = Perl::Version->new($first->{$module});
+            my $v2 = Perl::Version->new($second->{$module});
+            if($v1 > $v2)
             {
                 $older{$module} = [$first->{$module}, $second->{$module}];
             }
-            elsif($first->{$module} < $second->{$module})
+            elsif($v1 < $v2)
             {
                 $newer{$module} = [$first->{$module}, $second->{$module}];
             }
