@@ -2,6 +2,10 @@ Revision history for Server-Module-Comparison
 
 {{ $NEXT }}
 
+0.007     2017-01-04 10:20:18+00:00 Europe/London
+
+  - Fixed typo.
+
 0.006     2017-01-04 10:10:32+00:00 Europe/London
 
   - Write a proper differences report #5
