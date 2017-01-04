@@ -10,7 +10,7 @@ use Capture::Tiny qw/capture/;
 use failures qw/module::comparison/;
 use Perl::Version;
 
-our $VERSION = '0.008';
+our $VERSION = '0.009';
 
 has perl_path => (is => 'ro', isa => Str, default => '');
 has modules => (is => 'ro', isa => ArrayRef);
