@@ -2,6 +2,10 @@ Revision history for Server-Module-Comparison
 
 {{ $NEXT }}
 
+0.009     2017-01-05 08:52:58+00:00 Europe/London
+
+  - Added new dependency
+
 0.008     2017-01-04 15:35:04+00:00 Europe/London
 
   - Fix #6 and compare version numbers correctly
