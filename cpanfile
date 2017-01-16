@@ -30,7 +30,7 @@ on 'develop' => sub {
   requires "Test::More" => "0";
   requires "Test::Pod" => "1.41";
   requires "blib" => "1.01";
-  requires "perl" => "5.006";
+  requires "perl" => "5.008";
   requires "strict" => "0";
   requires "warnings" => "0";
 };
