@@ -2,6 +2,11 @@ Revision history for Server-Module-Comparison
 
 {{ $NEXT }}
 
+0.011     2017-01-16 20:08:17+00:00 Europe/London
+
+  - Add [MinimumPerlFast] to build process to ensure
+    perl version required is provided (manwar).
+
 0.010     2017-01-16 16:19:06+00:00 Europe/London
 
   - Fix issue #7 by fudging undef
