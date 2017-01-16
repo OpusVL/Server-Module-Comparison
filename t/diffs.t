@@ -4,7 +4,9 @@ use Server::Module::Comparison;
 ok my $comparer = Server::Module::Comparison->new({
         modules => []
     });
+
 my $status1 = {
+        'OpenERP::XMLRPC::Simple' => 'undef',
 		'OpusVL::AppKit' => '2.26',
 		'OpusVL::CMS' => '0.82',
 		'OpusVL::AppKitX::CMSView' => '0.75',
@@ -44,7 +46,8 @@ eq_or_diff $report,
 		'OpusVL::CMSExport' => '0.1'
 	},
 	removed => {
-		'Some::Schema' => '0.37'
+		'Some::Schema' => '0.37',
+        'OpenERP::XMLRPC::Simple' => 'undef',
 	},
 	updated => {
 		'OpusVL::AppKitX::CMSView' => [
@@ -63,6 +66,7 @@ OpusVL::AppKit                          	2.26 -> 2.25
 
 REMOVED Modules
 
+OpenERP::XMLRPC::Simple                 	undef
 Some::Schema                            	0.37
 
 Installed Modules

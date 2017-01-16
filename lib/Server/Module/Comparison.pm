@@ -148,6 +148,19 @@ sub _module_pair
     }
 }
 
+sub _wrap_version
+{
+    my $version = shift;
+    if($version && $version eq 'undef')
+    {
+        # this isn't perfect, in fact it may bite us.
+        # I believe that undef does indicate that a module is
+        # there, it's just it doesn't have $VERSION set.
+        return Perl::Version->new('0');
+    }
+    return Perl::Version->new($version);
+}
+
 sub difference_report
 {
     my $self = shift;
@@ -162,8 +175,8 @@ sub difference_report
     {
         if(exists $second->{$module})
         {
-            my $v1 = Perl::Version->new($first->{$module});
-            my $v2 = Perl::Version->new($second->{$module});
+            my $v1 = _wrap_version($first->{$module});
+            my $v2 = _wrap_version($second->{$module});
             if($v1 > $v2)
             {
                 $older{$module} = [$first->{$module}, $second->{$module}];
