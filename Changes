@@ -2,6 +2,10 @@ Revision history for Server-Module-Comparison
 
 {{ $NEXT }}
 
+0.010     2017-01-16 16:19:06+00:00 Europe/London
+
+  - Fix issue #7 by fudging undef
+
 0.009     2017-01-05 08:52:58+00:00 Europe/London
 
   - Added new dependency
