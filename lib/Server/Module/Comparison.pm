@@ -151,7 +151,7 @@ sub _module_pair
 sub _wrap_version
 {
     my $version = shift;
-    if($version && $version eq 'undef')
+    if($version && ($version eq 'undef' || $version eq 'missing'))
     {
         # this isn't perfect, in fact it may bite us.
         # I believe that undef does indicate that a module is

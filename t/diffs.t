@@ -7,6 +7,7 @@ ok my $comparer = Server::Module::Comparison->new({
 
 my $status1 = {
         'OpenERP::XMLRPC::Simple' => 'undef',
+        'Moose' => 'missing',
 		'OpusVL::AppKit' => '2.26',
 		'OpusVL::CMS' => '0.82',
 		'OpusVL::AppKitX::CMSView' => '0.75',
@@ -48,6 +49,7 @@ eq_or_diff $report,
 	removed => {
 		'Some::Schema' => '0.37',
         'OpenERP::XMLRPC::Simple' => 'undef',
+        'Moose' => 'missing',
 	},
 	updated => {
 		'OpusVL::AppKitX::CMSView' => [
@@ -66,6 +68,7 @@ OpusVL::AppKit                          	2.26 -> 2.25
 
 REMOVED Modules
 
+Moose                                   	missing
 OpenERP::XMLRPC::Simple                 	undef
 Some::Schema                            	0.37
 
