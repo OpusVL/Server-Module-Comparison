@@ -258,6 +258,19 @@ sub human_readable_report
 	return join "\n", @lines;
 }
 
+sub human_readable_list
+{
+    my $self = shift;
+    my $list = shift;
+
+    my @lines;
+    for my $module (keys %$list)
+    {
+        push @lines, sprintf("%-40s\t%s", $module, $list->{$module});
+    }
+    return join "\n", @lines;
+}
+
 1;
 
 =head1 SYNOPSIS
