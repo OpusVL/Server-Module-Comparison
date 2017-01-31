@@ -2,6 +2,10 @@ Revision history for Server-Module-Comparison
 
 {{ $NEXT }}
 
+0.012     2017-01-31 11:35:50+00:00 Europe/London
+
+  - Fixed problem with display of missing modules.
+
 0.011     2017-01-16 20:08:17+00:00 Europe/London
 
   - Add [MinimumPerlFast] to build process to ensure
