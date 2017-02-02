@@ -268,6 +268,7 @@ sub human_readable_list
     {
         push @lines, sprintf("%-40s\t%s", $module, $list->{$module});
     }
+    push @lines, '';
     return join "\n", @lines;
 }
 
